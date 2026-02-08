@@ -35,13 +35,13 @@ function decodeToken(token: string): UserPayload | null {
 }
 
 function initAuthState(): AuthState {
-  const savedToken = localStorage.getItem("token");
+  const savedToken = sessionStorage.getItem("token");
   if (!savedToken) return { token: null, user: null };
 
   const payload = decodeToken(savedToken);
 
   if (!payload) {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     return { token: null, user: null };
   }
 
@@ -59,12 +59,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    localStorage.setItem("token", token);
+    sessionStorage.setItem("token", token);
     setAuth({ token, user: payload });
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     setAuth({ token: null, user: null });
   }, []);
 
