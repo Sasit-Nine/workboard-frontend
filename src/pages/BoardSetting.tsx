@@ -1,4 +1,3 @@
-// src/pages/BoardSettingsPage.tsx
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -6,6 +5,7 @@ import BoardSidebar from "../components/Sidebar";
 import { apiService } from "../api/api";
 import { useAuth } from "../context/AuthContext";
 import { Settings, Pencil, Trash2, Save, X } from "lucide-react";
+import PageTransition from "./PageTransition";
 
 type BoardMember = {
   id: number;
@@ -241,154 +241,157 @@ const BoardSettingsPage = () => {
             onClose={() => setOpen(false)}
           />
         </div>
+        <PageTransition>
+          <main className="p-4 sm:p-6 sm:pl-80">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+              <div>
+                <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
+                  <Settings className="h-6 w-6" />
+                  ตั้งค่าบอร์ด
+                </h1>
+                <p className="text-sm text-gray-500 mt-1">
+                  แก้ไขชื่อบอร์ดและจัดการการลบ (สิทธิ์:{" "}
+                  <span className="font-semibold">{myRole}</span>)
+                </p>
+              </div>
+            </div>
 
-        <main className="p-4 sm:p-6 sm:pl-80">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
-            <div>
-              <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
-                <Settings className="h-6 w-6" />
-                ตั้งค่าบอร์ด
-              </h1>
-              <p className="text-sm text-gray-500 mt-1">
-                แก้ไขชื่อบอร์ดและจัดการการลบ (สิทธิ์:{" "}
-                <span className="font-semibold">{myRole}</span>)
-              </p>
-            </div>
-          </div>
-
-          {loading ? (
-            <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm text-sm text-gray-500">
-              กำลังโหลดข้อมูล...
-            </div>
-          ) : !board ? (
-            <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm text-sm text-gray-500">
-              ไม่พบบอร์ดนี้
-            </div>
-          ) : (
-            <>
-              {/* Edit board name */}
-              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-sm">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-gray-500">
-                      ชื่อบอร์ด
-                    </p>
-                    {!isEditing ? (
-                      <p className="mt-1 text-xl font-extrabold text-gray-900 truncate">
-                        {board.name}
+            {loading ? (
+              <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm text-sm text-gray-500">
+                กำลังโหลดข้อมูล...
+              </div>
+            ) : !board ? (
+              <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm text-sm text-gray-500">
+                ไม่พบบอร์ดนี้
+              </div>
+            ) : (
+              <>
+                {/* Edit board name */}
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-sm">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-gray-500">
+                        ชื่อบอร์ด
                       </p>
+                      {!isEditing ? (
+                        <p className="mt-1 text-xl font-extrabold text-gray-900 truncate">
+                          {board.name}
+                        </p>
+                      ) : null}
+                    </div>
+
+                    {!isEditing ? (
+                      <button
+                        type="button"
+                        onClick={startEdit}
+                        className={[
+                          "h-10 px-4 rounded-xl border border-gray-200 bg-white",
+                          "text-gray-700 font-semibold text-sm",
+                          "hover:bg-gray-50 transition",
+                          "flex items-center justify-center gap-2",
+                          !canManage ? "opacity-50 cursor-not-allowed" : "",
+                        ].join(" ")}
+                        disabled={!canManage}
+                        title={
+                          !canManage ? "เฉพาะ OWNER เท่านั้น" : "แก้ไขชื่อบอร์ด"
+                        }
+                      >
+                        <Pencil className="h-4 w-4" />
+                        แก้ไข
+                      </button>
                     ) : null}
                   </div>
 
-                  {!isEditing ? (
-                    <button
-                      type="button"
-                      onClick={startEdit}
-                      className={[
-                        "h-10 px-4 rounded-xl border border-gray-200 bg-white",
-                        "text-gray-700 font-semibold text-sm",
-                        "hover:bg-gray-50 transition",
-                        "flex items-center justify-center gap-2",
-                        !canManage ? "opacity-50 cursor-not-allowed" : "",
-                      ].join(" ")}
-                      disabled={!canManage}
-                      title={!canManage ? "เฉพาะ OWNER เท่านั้น" : "แก้ไขชื่อบอร์ด"}
-                    >
-                      <Pencil className="h-4 w-4" />
-                      แก้ไข
-                    </button>
+                  {isEditing ? (
+                    <div className="mt-4 rounded-2xl border border-gray-200 bg-gray-50 p-4">
+                      <label className="text-sm font-semibold text-gray-700">
+                        ชื่อใหม่
+                      </label>
+                      <input
+                        autoFocus
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") submitEdit();
+                          if (e.key === "Escape") cancelEdit();
+                        }}
+                        className="mt-2 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                        placeholder="เช่น ทีม A - Sprint 1"
+                      />
+
+                      <div className="mt-3 flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={submitEdit}
+                          disabled={!name.trim() || saving}
+                          className="flex-1 h-10 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-60 flex items-center justify-center gap-2"
+                        >
+                          <Save className="h-4 w-4" />
+                          {saving ? "กำลังบันทึก..." : "บันทึก"}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={cancelEdit}
+                          disabled={saving}
+                          className="h-10 px-4 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
+                        >
+                          <X className="h-4 w-4" />
+                          ยกเลิก
+                        </button>
+                      </div>
+
+                      <p className="mt-2 text-xs text-gray-500">
+                        กด <b>Enter</b> เพื่อบันทึก / <b>Esc</b> เพื่อยกเลิก
+                      </p>
+                    </div>
+                  ) : null}
+
+                  {!canManage ? (
+                    <div className="mt-4 rounded-xl border border-yellow-200 bg-yellow-50 px-3 py-2 text-sm text-yellow-800">
+                      คุณเป็น <b>{myRole}</b> จึงแก้ไข/ลบบอร์ดไม่ได้ (ต้องเป็น{" "}
+                      <b>OWNER</b>)
+                    </div>
                   ) : null}
                 </div>
 
-                {isEditing ? (
-                  <div className="mt-4 rounded-2xl border border-gray-200 bg-gray-50 p-4">
-                    <label className="text-sm font-semibold text-gray-700">
-                      ชื่อใหม่
-                    </label>
-                    <input
-                      autoFocus
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") submitEdit();
-                        if (e.key === "Escape") cancelEdit();
-                      }}
-                      className="mt-2 w-full rounded-xl border border-gray-200 bg-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                      placeholder="เช่น ทีม A - Sprint 1"
-                    />
-
-                    <div className="mt-3 flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={submitEdit}
-                        disabled={!name.trim() || saving}
-                        className="flex-1 h-10 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-60 flex items-center justify-center gap-2"
-                      >
-                        <Save className="h-4 w-4" />
-                        {saving ? "กำลังบันทึก..." : "บันทึก"}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={cancelEdit}
-                        disabled={saving}
-                        className="h-10 px-4 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition flex items-center justify-center gap-2"
-                      >
-                        <X className="h-4 w-4" />
-                        ยกเลิก
-                      </button>
+                {/* Danger zone */}
+                <div className="mt-4 bg-white p-4 sm:p-5 rounded-2xl border border-red-200 shadow-sm">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-extrabold text-red-700">
+                        Danger Zone
+                      </p>
+                      <p className="mt-1 text-sm text-gray-600">
+                        การลบบอร์ดจะลบข้อมูลทั้งหมดของบอร์ดนี้และไม่สามารถกู้คืนได้
+                      </p>
                     </div>
 
-                    <p className="mt-2 text-xs text-gray-500">
-                      กด <b>Enter</b> เพื่อบันทึก / <b>Esc</b> เพื่อยกเลิก
-                    </p>
-                  </div>
-                ) : null}
-
-                {!canManage ? (
-                  <div className="mt-4 rounded-xl border border-yellow-200 bg-yellow-50 px-3 py-2 text-sm text-yellow-800">
-                    คุณเป็น <b>{myRole}</b> จึงแก้ไข/ลบบอร์ดไม่ได้ (ต้องเป็น{" "}
-                    <b>OWNER</b>)
-                  </div>
-                ) : null}
-              </div>
-
-              {/* Danger zone */}
-              <div className="mt-4 bg-white p-4 sm:p-5 rounded-2xl border border-red-200 shadow-sm">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="text-sm font-extrabold text-red-700">
-                      Danger Zone
-                    </p>
-                    <p className="mt-1 text-sm text-gray-600">
-                      การลบบอร์ดจะลบข้อมูลทั้งหมดของบอร์ดนี้และไม่สามารถกู้คืนได้
-                    </p>
+                    <button
+                      type="button"
+                      onClick={handleDeleteBoard}
+                      disabled={!canManage || deleting}
+                      className={[
+                        "h-10 px-4 rounded-xl bg-red-600 text-white font-semibold",
+                        "hover:bg-red-700 transition disabled:opacity-60",
+                        "flex items-center justify-center gap-2",
+                      ].join(" ")}
+                      title={!canManage ? "เฉพาะ OWNER เท่านั้น" : "ลบบอร์ด"}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      {deleting ? "กำลังลบ..." : "ลบบอร์ด"}
+                    </button>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={handleDeleteBoard}
-                    disabled={!canManage || deleting}
-                    className={[
-                      "h-10 px-4 rounded-xl bg-red-600 text-white font-semibold",
-                      "hover:bg-red-700 transition disabled:opacity-60",
-                      "flex items-center justify-center gap-2",
-                    ].join(" ")}
-                    title={!canManage ? "เฉพาะ OWNER เท่านั้น" : "ลบบอร์ด"}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    {deleting ? "กำลังลบ..." : "ลบบอร์ด"}
-                  </button>
+                  <div className="mt-3 text-xs text-gray-500">
+                    แนะนำ: ถ้าต้องการเก็บไว้ ให้เปลี่ยนชื่อหรือย้ายงานออกก่อน
+                  </div>
                 </div>
-
-                <div className="mt-3 text-xs text-gray-500">
-                  แนะนำ: ถ้าต้องการเก็บไว้ ให้เปลี่ยนชื่อหรือย้ายงานออกก่อน
-                </div>
-              </div>
-            </>
-          )}
-        </main>
+              </>
+            )}
+          </main>
+        </PageTransition>
       </div>
     </div>
   );

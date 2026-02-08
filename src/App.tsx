@@ -9,70 +9,90 @@ import ScrumBoardPage from "./pages/ScrumBoardPage";
 import Navbar from "./components/Navbar";
 import MyBoardPage from "./pages/MyBoardPage";
 import BoardSettingsPage from "./pages/BoardSetting";
+import { useAuth } from "./context/AuthContext";
+import { AnimatePresence } from "framer-motion";
 
 function App() {
+  const { isAuthenticated } = useAuth();
   return (
     <>
       <Router>
-        <Routes>
-          {/* <Route path='/' element={<LandingPage />} /> */}
-          <Route
-            path="/login"
-            element={
-              <div>
-                <Navbar />
-                <LoginPage />
-              </div>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <div>
-                <Navbar />
-                <SignUpPage />
-              </div>
-            }
-          />
-          <Route element={<ProtectedRoute />}>
+        <AnimatePresence mode="wait">
+          <Routes>
             <Route
               path="/"
               element={
+                !isAuthenticated ? (
+                  <div>
+                    <Navbar />
+                    <LandingPage />
+                  </div>
+                ) : (
+                  <div>
+                    <Navbar />
+                    <MyBoardPage />
+                  </div>
+                )
+              }
+            />
+            <Route
+              path="/login"
+              element={
                 <div>
                   <Navbar />
-                  <MyBoardPage />
+                  <LoginPage />
                 </div>
               }
             />
             <Route
-              path="/board/:id"
+              path="/signup"
               element={
                 <div>
                   <Navbar />
-                  <ScrumBoardPage />
+                  <SignUpPage />
                 </div>
               }
             />
-            <Route
-              path="/boards/:id/members"
-              element={
-                <div>
-                  <Navbar />
-                  <BoardMembersPage />
-                </div>
-              }
-            />
-            <Route
-              path="/boards/:id/settings"
-              element={
-                <div>
-                  <Navbar />
-                  <BoardSettingsPage />
-                </div>
-              }
-            />
-          </Route>
-        </Routes>
+            <Route element={<ProtectedRoute />}>
+              <Route
+                path="/dashboard"
+                element={
+                  <div>
+                    <Navbar />
+                    <MyBoardPage />
+                  </div>
+                }
+              />
+              <Route
+                path="/board/:id"
+                element={
+                  <div>
+                    <Navbar />
+                    <ScrumBoardPage />
+                  </div>
+                }
+              />
+              <Route
+                path="/boards/:id/members"
+                element={
+                  <div>
+                    <Navbar />
+                    <BoardMembersPage />
+                  </div>
+                }
+              />
+              <Route
+                path="/boards/:id/settings"
+                element={
+                  <div>
+                    <Navbar />
+                    <BoardSettingsPage />
+                  </div>
+                }
+              />
+            </Route>
+          </Routes>
+        </AnimatePresence>
       </Router>
     </>
   );

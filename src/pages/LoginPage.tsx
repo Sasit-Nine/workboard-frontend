@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { apiService } from "../api/api";
 import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext";
+import PageTransition from "./PageTransition";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ export default function LoginPage() {
 
       if ("access_token" in response) {
         login(response.access_token);
-        navigate("/");
+        navigate("/dashboard");
       }
     } catch {
       Swal.fire({
@@ -59,6 +60,7 @@ export default function LoginPage() {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-[90vh] flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="bg-white w-full max-w-6xl rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-162.5">
         <div className="hidden lg:flex lg:w-1/2 bg-[#2E7CF6] p-16 flex-col justify-center relative overflow-hidden">
@@ -163,5 +165,6 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+    </PageTransition>
   );
 }

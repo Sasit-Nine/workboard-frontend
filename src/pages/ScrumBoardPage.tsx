@@ -12,6 +12,7 @@ import {
   MoreHorizontal,
   Edit3,
 } from "lucide-react";
+import PageTransition from "./PageTransition";
 
 import {
   DndContext,
@@ -1074,247 +1075,253 @@ const ScrumBoardPage = () => {
           />
         </div>
 
-        <main className="p-4 sm:p-6 sm:pl-80">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
-            <div>
-              <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
-                {board?.name ?? "Board"}
-              </h1>
-              <p className="text-sm text-gray-500 mt-1">
-                ลากคอลัมน์และการ์ดเพื่อจัดลำดับงาน
-              </p>
+        <PageTransition>
+          <main className="p-4 sm:p-6 sm:pl-80">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4">
+              <div>
+                <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
+                  {board?.name ?? "Board"}
+                </h1>
+                <p className="text-sm text-gray-500 mt-1">
+                  ลากคอลัมน์และการ์ดเพื่อจัดลำดับงาน
+                </p>
+              </div>
             </div>
-          </div>
 
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCorners}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-          >
-            <SortableContext
-              items={columnIds}
-              strategy={horizontalListSortingStrategy}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCorners}
+              onDragStart={onDragStart}
+              onDragEnd={onDragEnd}
             >
-              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-sm">
-                <div
-                  className={[
-                    "gap-4",
-                    columns.length <= 3 ? "grid" : "flex overflow-x-auto",
-                    "pb-4 -mx-4 px-4 sm:mx-0 sm:px-0",
-                    columns.length <= 3 ? "overflow-visible" : "",
-                  ].join(" ")}
-                  style={
-                    columns.length <= 3
-                      ? {
-                          gridTemplateColumns: `repeat(${
-                            columns.length + 1
-                          }, minmax(0, 1fr))`,
-                        }
-                      : undefined
-                  }
-                >
-                  {columns.map((col) => {
-                    const taskIds = col.tasks.map((t) => makeTaskId(t.id));
-
-                    return (
-                      <div
-                        key={col.id}
-                        className={
-                          columns.length <= 3 ? "min-w-0" : "w-80 shrink-0"
-                        }
-                      >
-                        <SortableColumn
-                          column={col}
-                          onEditName={handleEditColumnName}
-                          onDelete={handleDeleteColumn}
-                        >
-                          <SortableContext
-                            items={taskIds}
-                            strategy={verticalListSortingStrategy}
-                          >
-                            <div className="space-y-3 min-h-2">
-                              {col.tasks.map((task) => (
-                                <SortableTask
-                                  key={task.id}
-                                  task={task}
-                                  boardMembers={board?.members ?? []}
-                                  onEdit={handleEditTask}
-                                  onDelete={handleDeleteTask}
-                                />
-                              ))}
-
-                              {addingTaskColumnId === col.id ? (
-                                <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-3">
-                                  <input
-                                    autoFocus
-                                    value={newTaskTitle}
-                                    onChange={(e) =>
-                                      setNewTaskTitle(e.target.value)
-                                    }
-                                    placeholder="ชื่อ Task..."
-                                    className="w-full rounded-lg border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                                    onKeyDown={(e) => {
-                                      if (e.key === "Enter")
-                                        submitAddTask(col.id);
-                                      if (e.key === "Escape") cancelAddTask();
-                                    }}
-                                  />
-
-                                  <textarea
-                                    value={newTaskDescription}
-                                    onChange={(e) =>
-                                      setNewTaskDescription(e.target.value)
-                                    }
-                                    placeholder="รายละเอียดเพิ่มเติม..."
-                                    className="mt-2 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                                  />
-
-                                  <div className="flex gap-2 mt-3">
-                                    <button
-                                      onClick={() => submitAddTask(col.id)}
-                                      className="flex-1 rounded-lg cursor-pointer bg-blue-600 text-white py-2 text-sm font-semibold hover:bg-blue-700"
-                                      disabled={!newTaskTitle.trim()}
-                                    >
-                                      สร้าง Task
-                                    </button>
-
-                                    <button
-                                      onClick={cancelAddTask}
-                                      className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm cursor-pointer hover:bg-red-700"
-                                    >
-                                      ยกเลิก
-                                    </button>
-                                  </div>
-
-                                  <p className="mt-2 text-xs text-gray-500">
-                                    กด <b>Enter</b> เพื่อสร้าง / <b>Esc</b>{" "}
-                                    เพื่อยกเลิก
-                                  </p>
-                                </div>
-                              ) : (
-                                <button
-                                  onClick={() => startAddTask(col.id)}
-                                  className="mt-3 w-full flex items-center cursor-pointer justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 py-2 text-sm text-gray-500 hover:bg-gray-100 transition"
-                                >
-                                  <span className="text-lg">＋</span>
-                                  เพิ่ม Task
-                                </button>
-                              )}
-                            </div>
-
-                            <ColumnDropZone columnId={col.id} />
-                          </SortableContext>
-                        </SortableColumn>
-                      </div>
-                    );
-                  })}
-
+              <SortableContext
+                items={columnIds}
+                strategy={horizontalListSortingStrategy}
+              >
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-sm">
                   <div
-                    className={
-                      columns.length <= 3 ? "min-w-0" : "w-80 shrink-0"
+                    className={[
+                      "gap-4",
+                      columns.length <= 3 ? "grid" : "flex overflow-x-auto",
+                      "pb-4 -mx-4 px-4 sm:mx-0 sm:px-0",
+                      columns.length <= 3 ? "overflow-visible" : "",
+                    ].join(" ")}
+                    style={
+                      columns.length <= 3
+                        ? {
+                            gridTemplateColumns: `repeat(${
+                              columns.length + 1
+                            }, minmax(0, 1fr))`,
+                          }
+                        : undefined
                     }
                   >
-                    {!isAddingColumn ? (
-                      <button
-                        type="button"
-                        onClick={startAddColumn}
-                        className="h-full w-full min-h-35 cursor-pointer rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 transition flex flex-col items-center justify-center text-gray-600"
-                      >
-                        <div className="h-10 w-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center shadow-sm">
-                          <span className="text-xl">+</span>
-                        </div>
-                        <p className="mt-3 font-semibold">เพิ่มคอลัมน์</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          กดเพื่อสร้างคอลัมน์ใหม่
-                        </p>
-                      </button>
-                    ) : (
-                      <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-                        <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-                          <p className="font-bold text-gray-900">คอลัมน์ใหม่</p>
-                          <button
-                            type="button"
-                            onClick={cancelAddColumn}
-                            className="h-9 w-9 rounded-xl hover:bg-gray-100 text-gray-500 transition flex items-center justify-center"
-                            aria-label="Cancel"
+                    {columns.map((col) => {
+                      const taskIds = col.tasks.map((t) => makeTaskId(t.id));
+
+                      return (
+                        <div
+                          key={col.id}
+                          className={
+                            columns.length <= 3 ? "min-w-0" : "w-80 shrink-0"
+                          }
+                        >
+                          <SortableColumn
+                            column={col}
+                            onEditName={handleEditColumnName}
+                            onDelete={handleDeleteColumn}
                           >
-                            ✕
-                          </button>
-                        </div>
-
-                        <div className="p-4">
-                          <label className="text-sm font-semibold text-gray-700">
-                            ชื่อคอลัมน์
-                          </label>
-                          <input
-                            autoFocus
-                            value={newColumnName}
-                            onChange={(e) => setNewColumnName(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") submitAddColumn();
-                              if (e.key === "Escape") cancelAddColumn();
-                            }}
-                            placeholder="เช่น To Do, In Progress..."
-                            className="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-                          />
-
-                          <div className="mt-3 flex items-center gap-2">
-                            <button
-                              type="button"
-                              onClick={submitAddColumn}
-                              className="flex-1 px-3 py-2 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-50"
-                              disabled={!newColumnName.trim()}
+                            <SortableContext
+                              items={taskIds}
+                              strategy={verticalListSortingStrategy}
                             >
-                              สร้างคอลัมน์
-                            </button>
+                              <div className="space-y-3 min-h-2">
+                                {col.tasks.map((task) => (
+                                  <SortableTask
+                                    key={task.id}
+                                    task={task}
+                                    boardMembers={board?.members ?? []}
+                                    onEdit={handleEditTask}
+                                    onDelete={handleDeleteTask}
+                                  />
+                                ))}
+
+                                {addingTaskColumnId === col.id ? (
+                                  <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-3">
+                                    <input
+                                      autoFocus
+                                      value={newTaskTitle}
+                                      onChange={(e) =>
+                                        setNewTaskTitle(e.target.value)
+                                      }
+                                      placeholder="ชื่อ Task..."
+                                      className="w-full rounded-lg border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                                      onKeyDown={(e) => {
+                                        if (e.key === "Enter")
+                                          submitAddTask(col.id);
+                                        if (e.key === "Escape") cancelAddTask();
+                                      }}
+                                    />
+
+                                    <textarea
+                                      value={newTaskDescription}
+                                      onChange={(e) =>
+                                        setNewTaskDescription(e.target.value)
+                                      }
+                                      placeholder="รายละเอียดเพิ่มเติม..."
+                                      className="mt-2 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+
+                                    <div className="flex gap-2 mt-3">
+                                      <button
+                                        onClick={() => submitAddTask(col.id)}
+                                        className="flex-1 rounded-lg cursor-pointer bg-blue-600 text-white py-2 text-sm font-semibold hover:bg-blue-700"
+                                        disabled={!newTaskTitle.trim()}
+                                      >
+                                        สร้าง Task
+                                      </button>
+
+                                      <button
+                                        onClick={cancelAddTask}
+                                        className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm cursor-pointer hover:bg-red-700"
+                                      >
+                                        ยกเลิก
+                                      </button>
+                                    </div>
+
+                                    <p className="mt-2 text-xs text-gray-500">
+                                      กด <b>Enter</b> เพื่อสร้าง / <b>Esc</b>{" "}
+                                      เพื่อยกเลิก
+                                    </p>
+                                  </div>
+                                ) : (
+                                  <button
+                                    onClick={() => startAddTask(col.id)}
+                                    className="mt-3 w-full flex items-center cursor-pointer justify-center gap-2 rounded-xl border-2 border-dashed border-gray-300 py-2 text-sm text-gray-500 hover:bg-gray-100 transition"
+                                  >
+                                    <span className="text-lg">＋</span>
+                                    เพิ่ม Task
+                                  </button>
+                                )}
+                              </div>
+
+                              <ColumnDropZone columnId={col.id} />
+                            </SortableContext>
+                          </SortableColumn>
+                        </div>
+                      );
+                    })}
+
+                    <div
+                      className={
+                        columns.length <= 3 ? "min-w-0" : "w-80 shrink-0"
+                      }
+                    >
+                      {!isAddingColumn ? (
+                        <button
+                          type="button"
+                          onClick={startAddColumn}
+                          className="h-full w-full min-h-35 cursor-pointer rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 transition flex flex-col items-center justify-center text-gray-600"
+                        >
+                          <div className="h-10 w-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center shadow-sm">
+                            <span className="text-xl">+</span>
+                          </div>
+                          <p className="mt-3 font-semibold">เพิ่มคอลัมน์</p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            กดเพื่อสร้างคอลัมน์ใหม่
+                          </p>
+                        </button>
+                      ) : (
+                        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+                          <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+                            <p className="font-bold text-gray-900">
+                              คอลัมน์ใหม่
+                            </p>
                             <button
                               type="button"
                               onClick={cancelAddColumn}
-                              className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition"
+                              className="h-9 w-9 rounded-xl hover:bg-gray-100 text-gray-500 transition flex items-center justify-center"
+                              aria-label="Cancel"
                             >
-                              ยกเลิก
+                              ✕
                             </button>
                           </div>
 
-                          <p className="mt-2 text-xs text-gray-500">
-                            กด <span className="font-semibold">Enter</span>{" "}
-                            เพื่อสร้าง /{" "}
-                            <span className="font-semibold">Esc</span>{" "}
-                            เพื่อยกเลิก
-                          </p>
+                          <div className="p-4">
+                            <label className="text-sm font-semibold text-gray-700">
+                              ชื่อคอลัมน์
+                            </label>
+                            <input
+                              autoFocus
+                              value={newColumnName}
+                              onChange={(e) => setNewColumnName(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") submitAddColumn();
+                                if (e.key === "Escape") cancelAddColumn();
+                              }}
+                              placeholder="เช่น To Do, In Progress..."
+                              className="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
+                            />
+
+                            <div className="mt-3 flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={submitAddColumn}
+                                className="flex-1 px-3 py-2 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-50"
+                                disabled={!newColumnName.trim()}
+                              >
+                                สร้างคอลัมน์
+                              </button>
+                              <button
+                                type="button"
+                                onClick={cancelAddColumn}
+                                className="px-3 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition"
+                              >
+                                ยกเลิก
+                              </button>
+                            </div>
+
+                            <p className="mt-2 text-xs text-gray-500">
+                              กด <span className="font-semibold">Enter</span>{" "}
+                              เพื่อสร้าง /{" "}
+                              <span className="font-semibold">Esc</span>{" "}
+                              เพื่อยกเลิก
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </SortableContext>
+              </SortableContext>
 
-            <DragOverlay>
-              {activeOverlay ? (
-                activeOverlay.type === "col" ? (
-                  <div className="w-80 rounded-2xl bg-white border border-gray-200 shadow-xl">
-                    <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
-                      <div className="h-2 w-2 rounded-full bg-blue-600" />
-                      <p className="font-bold">{activeOverlay.title}</p>
+              <DragOverlay>
+                {activeOverlay ? (
+                  activeOverlay.type === "col" ? (
+                    <div className="w-80 rounded-2xl bg-white border border-gray-200 shadow-xl">
+                      <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-blue-600" />
+                        <p className="font-bold">{activeOverlay.title}</p>
+                      </div>
+                      <div className="p-4 text-sm text-gray-500">
+                        กำลังลากคอลัมน์…
+                      </div>
                     </div>
-                    <div className="p-4 text-sm text-gray-500">
-                      กำลังลากคอลัมน์…
+                  ) : (
+                    <div className="w-72 rounded-xl bg-white border border-gray-200 shadow-xl p-3">
+                      <p className="font-semibold text-gray-900 line-clamp-2">
+                        {activeOverlay.title}
+                      </p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        กำลังลากการ์ด…
+                      </p>
                     </div>
-                  </div>
-                ) : (
-                  <div className="w-72 rounded-xl bg-white border border-gray-200 shadow-xl p-3">
-                    <p className="font-semibold text-gray-900 line-clamp-2">
-                      {activeOverlay.title}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-1">กำลังลากการ์ด…</p>
-                  </div>
-                )
-              ) : null}
-            </DragOverlay>
-          </DndContext>
-        </main>
+                  )
+                ) : null}
+              </DragOverlay>
+            </DndContext>
+          </main>
+        </PageTransition>
       </div>
     </div>
   );

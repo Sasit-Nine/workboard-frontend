@@ -160,7 +160,7 @@ const BoardSidebar = ({
 
         <div className="mt-6 border-t border-gray-100 pt-4">
           <Link
-            to="/"
+            to="/dashboard"
             className="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-blue-700 transition"
           >
             <span>←</span> กลับไปบอร์ดทั้งหมด
