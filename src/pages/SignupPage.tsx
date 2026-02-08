@@ -7,24 +7,16 @@ export default function Register() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (sessionStorage.getItem("token") || localStorage.getItem("token")) {
+    if (sessionStorage.getItem("token") || sessionStorage.getItem("token")) {
       navigate("/");
     }
   }, [navigate]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
   const [email, setEmail] = useState("");
   const [canSubmit, setCanSubmit] = useState(true);
-
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmpassword(e.target.value);
-    setPasswordError(e.target.value !== password);
-  };
 
   useEffect(() => {
     setCanSubmit(
@@ -32,32 +24,25 @@ export default function Register() {
         email.length > 0 &&
         password.length > 0 &&
         confirmpassword.length > 0 &&
-        !passwordError && !isLoading
+        password === confirmpassword &&
+        !isLoading
     );
-  },[canSubmit, passwordError, username, email, password, confirmpassword, isLoading]);
+  }, [canSubmit, username, email, password, confirmpassword, isLoading]);
 
-  useEffect(()=> {
-    console.log('isLoading changed:', isLoading);
-  },[isLoading])
+  useEffect(() => {
+    console.log("isLoading changed:", isLoading);
+  }, [isLoading]);
 
   const handleSubmit = async () => {
-    console.log('Submitting form with:', { username, email, password, confirmpassword });
+    console.log("Submitting form with:", {
+      username,
+      email,
+      password,
+      confirmpassword,
+    });
     setIsLoading(true);
 
-    console.log('Validating form inputs...');
-    if (password !== confirmpassword) {
-      setError("รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน");
-      setIsLoading(false);
-      return;
-    }
-
-    if (password.length < 6) {
-      setError("รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร");
-      setIsLoading(false);
-      return;
-    }
-
-    console.log('Calling signup API...');
+    console.log("Calling signup API...");
     try {
       const response = await apiService.signup({
         displayName: username,
@@ -65,7 +50,7 @@ export default function Register() {
         password,
       });
 
-      console.log('Signup response:', response);
+      console.log("Signup response:", response);
 
       if (response.message === "User registered successfully") {
         Swal.fire({
@@ -81,7 +66,7 @@ export default function Register() {
         icon: "error",
         title: "เกิดข้อผิดพลาด",
         text: "ไม่สามารถสมัครสมาชิกได้ กรุณาลองใหม่อีกครั้ง",
-      })
+      });
       return;
     } finally {
       setIsLoading(false);
@@ -174,7 +159,13 @@ export default function Register() {
                   placeholder="ป้อนรหัสผ่าน"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm ring-1 ring-gray-300 p-2 focus:ring-2 focus:ring-[#2E7CF6] outline-none"
                 />
+                {password.length < 6 && password.length > 0 && (
+                <p className="mb-1 mt-2 text-red-700 text-sm font-bold">
+                  อย่างน้อย 6 ตัวอักษร
+                </p>
+              )}
               </div>
+              
 
               {/* Confirm Password */}
               <div>
@@ -186,21 +177,19 @@ export default function Register() {
                   type="password"
                   required
                   value={confirmpassword}
-                  onChange={handleConfirmPasswordChange}
+                  onChange={(e) => {
+                    setConfirmpassword(e.target.value);
+                  }}
                   autoComplete="current-password"
                   placeholder="ยืนยันรหัสผ่าน"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm ring-1 ring-gray-300 p-2 focus:ring-2 focus:ring-[#2E7CF6] outline-none"
                 />
-                {passwordError && (
-                  <p className="mb-5 mt-2 text-red-700 text-sm font-bold">
-                    รหัสผ่านไม่ตรงกัน
-                  </p>
-                )}
-                {error && error.length > 0 && (
-                  <p className="mb-5 mt-2 text-red-700 text-sm font-bold">
-                    {error}
-                  </p>
-                )}
+                {!(password === confirmpassword) &&
+                  confirmpassword.length > 0 && (
+                    <p className="mb-5 mt-2 text-red-700 text-sm font-bold">
+                      รหัสผ่านไม่ตรงกัน
+                    </p>
+                  )}
               </div>
 
               <button

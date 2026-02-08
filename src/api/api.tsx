@@ -2,7 +2,8 @@ import type {
   SignUpRequest,
   SignUpResponse,
   LoginRequest,
-  LoginResponse,
+  LoginResponseSuccess,
+  LoginResponseFailure,
   CreateBoardRequest,
   CreateBoardResponse,
   DeleteBoardRequest,
@@ -29,7 +30,7 @@ export const apiService = {
 
   login: (body: LoginRequest) =>
     authClient
-      .post<LoginResponse>("/api/auth-service/login", body)
+      .post<LoginResponseSuccess | LoginResponseFailure>("/api/auth-service/login", body)
       .then((r) => r.data),
 
   createBoard: (body: CreateBoardRequest) =>

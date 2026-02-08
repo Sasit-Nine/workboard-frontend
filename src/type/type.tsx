@@ -16,8 +16,14 @@ export interface SignUpResponse {
   message: string;
 }
 
-export interface LoginResponse {
+export interface LoginResponseSuccess {
   access_token: string;
+}
+
+export interface LoginResponseFailure {
+  message: string;
+  error: string;
+  statusCode: number;
 }
 
 export interface LoginRequest {
