@@ -17,8 +17,19 @@ function App() {
         <Router>
           <Routes>
             <Route path='/' element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/login" element={
+              <div>
+                <Navbar />
+                <LoginPage />
+              </div>
+            } />
+            <Route path="/signup" element={
+              <div>
+                <Navbar />
+                <SignUpPage />
+              </div>
+              
+            } />
             <Route element={<ProtectedRoute />}>
               <Route path="/create-board" element={<CreateBoardPage />} />
               <Route path="/my-board" element={
