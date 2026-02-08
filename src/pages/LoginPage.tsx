@@ -61,7 +61,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="bg-white w-full max-w-6xl rounded-2xl shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-162.5">
-        {/* --- ฝั่งซ้าย: Welcome Section --- */}
         <div className="hidden lg:flex lg:w-1/2 bg-[#2E7CF6] p-16 flex-col justify-center relative overflow-hidden">
           <div className="z-10 text-white">
             <h1 className="text-4xl font-bold leading-tight">

@@ -213,6 +213,7 @@ export interface GetAllBoardsResponse {
 export interface Board {
   id: number
   name: string
+  members: Member[]
   created_at: string
 }
 

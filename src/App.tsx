@@ -4,7 +4,6 @@ import LoginPage from './pages/LoginPage'
 import SignUpPage from './pages/SignupPage'
 import LandingPage from './pages/LandingPage'
 import ProtectedRoute from './context/ProtectedRoute'
-import CreateBoardPage from './pages/CreateBoardPage'
 import MyBoardPage from './pages/MyBoardPage'
 import ScrumBoardPage from './pages/ScrumBoardPage'
 import TeamManage from './pages/TeamManage'
@@ -31,7 +30,6 @@ function App() {
               
             } />
             <Route element={<ProtectedRoute />}>
-              <Route path="/create-board" element={<CreateBoardPage />} />
               <Route path="/my-board" element={
                 <div>
                   <Navbar />
