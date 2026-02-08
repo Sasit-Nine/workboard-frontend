@@ -21,6 +21,14 @@ import type {
   GetAllBoardsResponse,
   GetBoardOneResponse,
   ColumnCreateResponse,
+  CreateTaskResponse,
+  EditTaskResponse,
+  DeleteTaskResponse,
+  GetMembersResponse,
+  AddMemberRequest,
+  AddMemberResponse,
+  RemoveMemberRequest,
+  RemoveMemberResponse,
 } from "../type/type";
 
 import { authClient, coreClient } from "./client";
@@ -51,7 +59,9 @@ export const apiService = {
     coreClient.post("/api/boards/edit-board", body).then((r) => r.data),
 
   createColumn: (body: CreateCollumnRequest) =>
-    coreClient.post<ColumnCreateResponse>("/api/columns/create-column", body).then((r) => r.data),
+    coreClient
+      .post<ColumnCreateResponse>("/api/columns/create-column", body)
+      .then((r) => r.data),
 
   deleteColumn: (body: DeleteCollumnRequest) =>
     coreClient.post("/api/columns/delete-column", body).then((r) => r.data),
@@ -65,13 +75,19 @@ export const apiService = {
       .then((r) => r.data),
 
   createTask: (body: CreateTaskRequest) =>
-    coreClient.post("/api/task/create-task", body).then((r) => r.data),
+    coreClient
+      .post<CreateTaskResponse>("/api/task/create-task", body)
+      .then((r) => r.data),
 
   deleteTask: (body: DeleteTaskRequest) =>
-    coreClient.post("/api/task/delete-task", body).then((r) => r.data),
+    coreClient
+      .post<DeleteTaskResponse>("/api/task/delete-task", body)
+      .then((r) => r.data),
 
   editTask: (body: EditTaskRequest) =>
-    coreClient.post("/api/task/edit-task", body).then((r) => r.data),
+    coreClient
+      .post<EditTaskResponse>("/api/task/edit-task", body)
+      .then((r) => r.data),
 
   changeTaskPosition: (body: EditTaskPositionRequest) =>
     coreClient
@@ -91,5 +107,20 @@ export const apiService = {
   getBoardOne: (boardId: number) =>
     coreClient
       .get<GetBoardOneResponse>(`/api/boards/get-board/${boardId}`)
+      .then((r) => r.data),
+
+  getMember: (boardId: number) =>
+    coreClient
+      .get<GetMembersResponse>(`/api/boards/get-board-members/${boardId}`)
+      .then((r) => r.data),
+
+  addMember: (data: AddMemberRequest) => 
+    coreClient
+      .post<AddMemberResponse>(`/api/boards/add-board-member`, data)
+      .then((r) => r.data),
+
+  removeMember: (data: RemoveMemberRequest) =>
+    coreClient
+      .post<RemoveMemberResponse>(`/api/boards/remove-board-member`, data)
       .then((r) => r.data),
 };

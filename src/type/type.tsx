@@ -80,6 +80,7 @@ export interface Task {
   description: string;
   position: number;
   created_at: string;
+  assignTo?: AssignTo
 }
 
 export interface DeleteBoardRequest {
@@ -115,8 +116,19 @@ export interface CreateTaskRequest {
   description: string;
   boardId: number;
   columnId: number;
-  assign_to: number;
-  create_by: number;
+  assign_to: number | null;
+  create_by: number | null;
+}
+
+export interface CreateTaskResponse {
+  id: number
+  board: Board
+  column: Column
+  createdBy: CreatedBy
+  title: string
+  description: string
+  position: number
+  created_at: string
 }
 
 export interface DeleteTaskRequest {
@@ -232,4 +244,54 @@ export interface ColumnCreateResponse {
   name: string
   position: number
 }
+
+export interface EditTaskResponse {
+  id: number
+  assignTo: AssignTo | null
+  title: string
+  description: string
+  position: number
+  created_at: string
+}
+
+export interface DeleteTaskResponse {
+  message: string;
+}
+
+export interface AddMemberRequest {
+  boardId: number
+  memberEmail: string
+}
+
+export interface AddMemberResponse {
+  id: number
+  board: Board
+  email: string
+  role: string
+  joined_at: string
+}
+
+export interface RemoveMemberRequest {
+  boardId: number
+  memberEmail: string
+}
+
+export interface RemoveMemberResponse {
+  message: string;
+}
+
+export interface GetMembersRequest {
+  boardId: number
+}
+
+export interface GetMembersResponse {
+  id: number
+  email: string
+  role: string
+  joined_at: string
+}
+
+
+
+
 
