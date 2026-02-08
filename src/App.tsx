@@ -14,24 +14,33 @@ function App() {
 
   return (
     <>
-        <Router>
-          <Routes>
-            <Route path='/' element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/create-board" element={<CreateBoardPage />} />
-              <Route path="/my-board" element={
-                <div>
-                  <Navbar />
-                  <MyBoardPage />
-                </div>
-               } />
-              <Route path="/board/:id" element={<ScrumBoardPage />} />
-              <Route path="/team-manage/:id" element={<TeamManage />} />
-            </Route>
-          </Routes>
-        </Router>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar />
+                <LandingPage />
+              </>
+            }
+          />
+          <Route path='/' element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/create-board" element={<CreateBoardPage />} />
+            <Route path="/my-board" element={
+              <div>
+                <Navbar />
+                <MyBoardPage />
+              </div>
+            } />
+            <Route path="/board/:id" element={<ScrumBoardPage />} />
+            <Route path="/team-manage/:id" element={<TeamManage />} />
+          </Route>
+        </Routes>
+      </Router>
     </>
   )
 }
