@@ -15,8 +15,6 @@ export default function Register() {
   const [confirmpassword, setConfirmpassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [email, setEmail] = useState("");
-
-
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -53,8 +51,6 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="bg-white w-full max-w-5xl rounded-[2rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row min-h-[650px]">
-        
-        {/* --- ฝั่งซ้าย: Welcome Section --- */}
         <div className="hidden lg:flex lg:w-1/2 bg-[#2E7CF6] p-16 flex-col justify-center relative overflow-hidden">
           <div className="z-10 text-white">
             <h1 className="text-4xl font-bold leading-tight">ยินดีต้อนรับสู่</h1>
@@ -65,7 +61,6 @@ export default function Register() {
               จัดการงานของคุณให้เป็นระบบและเพิ่มประสิทธิภาพการทำงานร่วมกันกับทีม
             </p>
           </div>
-          {/* ตกแต่งพื้นหลัง */}
           <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-white opacity-10 rounded-full"></div>
           <div className="absolute top-1/4 -left-10 w-32 h-32 bg-white opacity-5 rounded-full"></div>
         </div>
@@ -76,7 +71,6 @@ export default function Register() {
             <p className="mt-2 text-center text-sm text-gray-600 mb-8">
               มีบัญชีอยู่แล้ว? <Link to="/login" className="text-[#2E7CF6] hover:text-[#0747A6] font-medium">เข้าสู่ระบบ</Link>
             </p>
-
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Username */}
               <div>
