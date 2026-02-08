@@ -27,7 +27,10 @@ const Navbar = () => {
                 เข้าสู่ระบบ
               </Link>
 
-              <Link to="/signup" className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-blue-600 text-white text-sm sm:text-base font-semibold shadow hover:bg-blue-700 transition">
+              <Link
+                to="/signup"
+                className="px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 transition"
+              >
                 สมัครสมาชิก
               </Link>
             </>
