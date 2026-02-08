@@ -15,7 +15,7 @@ function App() {
     <>
         <Router>
           <Routes>
-            <Route path='/' element={<LandingPage />} />
+            {/* <Route path='/' element={<LandingPage />} /> */}
             <Route path="/login" element={
               <div>
                 <Navbar />
@@ -30,13 +30,19 @@ function App() {
               
             } />
             <Route element={<ProtectedRoute />}>
-              <Route path="/my-board" element={
+              <Route path="/" element={
                 <div>
                   <Navbar />
                   <MyBoardPage />
                 </div>
                } />
-              <Route path="/board/:id" element={<ScrumBoardPage />} />
+              <Route path="/board/:id" element={
+                <div>
+                  <Navbar />
+                  <ScrumBoardPage />
+                </div>
+                
+              } />
               <Route path="/team-manage/:id" element={<TeamManage />} />
             </Route>
           </Routes>

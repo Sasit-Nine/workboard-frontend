@@ -51,6 +51,15 @@ export interface CreateBoardResponse {
   columns: Column[];
 }
 
+export interface GetBoardOneResponse {
+  id: number
+  name: string
+  created_at: string
+  members: Member[]
+  columns: Column[]
+  tasks: Task[]
+}
+
 export interface Member {
   id: number;
   email: string;
@@ -215,5 +224,12 @@ export interface Board {
   name: string
   members: Member[]
   created_at: string
+}
+
+export interface ColumnCreateResponse {
+  id: number
+  board: Board
+  name: string
+  position: number
 }
 

@@ -19,6 +19,8 @@ import type {
   GetTaskResponse,
   ChangeTaskPositionResponse,
   GetAllBoardsResponse,
+  GetBoardOneResponse,
+  ColumnCreateResponse,
 } from "../type/type";
 
 import { authClient, coreClient } from "./client";
@@ -49,7 +51,7 @@ export const apiService = {
     coreClient.post("/api/boards/edit-board", body).then((r) => r.data),
 
   createColumn: (body: CreateCollumnRequest) =>
-    coreClient.post("/api/columns/create-column", body).then((r) => r.data),
+    coreClient.post<ColumnCreateResponse>("/api/columns/create-column", body).then((r) => r.data),
 
   deleteColumn: (body: DeleteCollumnRequest) =>
     coreClient.post("/api/columns/delete-column", body).then((r) => r.data),
@@ -84,5 +86,10 @@ export const apiService = {
   getAllBoard: () =>
     coreClient
       .get<GetAllBoardsResponse[]>(`/api/boards/get-all-boards`)
+      .then((r) => r.data),
+
+  getBoardOne: (boardId: number) =>
+    coreClient
+      .get<GetBoardOneResponse>(`/api/boards/get-board/${boardId}`)
       .then((r) => r.data),
 };

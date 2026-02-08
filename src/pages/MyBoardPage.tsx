@@ -3,7 +3,10 @@ import { apiService } from "../api/api";
 import type { GetAllBoardsResponse } from "../type/type";
 import Swal from "sweetalert2";
 import PopupCreateBoard from "../components/PopupCreateBoard";
+import { useNavigate } from "react-router-dom";
+
 const MyBoardPage = () => {
+  const navigate = useNavigate();
   const [boards, setBoards] = useState<GetAllBoardsResponse[]>([]);
   const [filterRole, setFilterRole] = useState<"ALL" | "OWNER" | "MEMBER">(
     "ALL"
@@ -252,7 +255,10 @@ const MyBoardPage = () => {
                           </span>
                         </p>
 
-                        <button className="px-3 py-1.5 rounded-xl cursor-pointer bg-gray-50 border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition">
+                        <button 
+                            onClick={() => navigate('/board/' + board.board.id)}
+
+                            className="px-3 py-1.5 rounded-xl cursor-pointer bg-gray-50 border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition">
                           เปิดบอร์ด →
                         </button>
                       </div>
