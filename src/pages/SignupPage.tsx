@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { apiService } from "../api/api";
+import Swal from "sweetalert2";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ export default function Register() {
   const [confirmpassword, setConfirmpassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [email, setEmail] = useState("");
+  const [canSubmit, setCanSubmit] = useState(true);
 
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -23,10 +26,25 @@ export default function Register() {
     setPasswordError(e.target.value !== password);
   };
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  useEffect(() => {
+    setCanSubmit(
+      username.length > 0 &&
+        email.length > 0 &&
+        password.length > 0 &&
+        confirmpassword.length > 0 &&
+        !passwordError && !isLoading
+    );
+  },[canSubmit, passwordError, username, email, password, confirmpassword, isLoading]);
+
+  useEffect(()=> {
+    console.log('isLoading changed:', isLoading);
+  },[isLoading])
+
+  const handleSubmit = async () => {
+    console.log('Submitting form with:', { username, email, password, confirmpassword });
     setIsLoading(true);
 
+    console.log('Validating form inputs...');
     if (password !== confirmpassword) {
       setError("รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน");
       setIsLoading(false);
@@ -39,17 +57,35 @@ export default function Register() {
       return;
     }
 
-    console.log("กำลังดำเนินการสมัครสมาชิกสำหรับ:", {
-      username,
-      email,
-      password,
-    });
+    console.log('Calling signup API...');
+    try {
+      const response = await apiService.signup({
+        displayName: username,
+        email,
+        password,
+      });
 
-    setTimeout(() => {
-      alert("สมัครสมาชิกสำเร็จ!");
+      console.log('Signup response:', response);
+
+      if (response.message === "User registered successfully") {
+        Swal.fire({
+          icon: "success",
+          title: "สมัครสมาชิกสำเร็จ",
+          text: "คุณได้สมัครสมาชิกเรียบร้อยแล้ว",
+        });
+        setIsLoading(false);
+        navigate("/login");
+      }
+    } catch {
+      Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: "ไม่สามารถสมัครสมาชิกได้ กรุณาลองใหม่อีกครั้ง",
+      })
+      return;
+    } finally {
       setIsLoading(false);
-      navigate("/login");
-    }, 1500);
+    }
   };
 
   return (
@@ -88,7 +124,7 @@ export default function Register() {
                 เข้าสู่ระบบ
               </Link>
             </p>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-6">
               {/* Username */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -126,7 +162,7 @@ export default function Register() {
               {/* Password */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  รหัสผ่าน
+                  รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)
                 </label>
                 <input
                   name="password"
@@ -156,20 +192,30 @@ export default function Register() {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm ring-1 ring-gray-300 p-2 focus:ring-2 focus:ring-[#2E7CF6] outline-none"
                 />
                 {passwordError && (
-                  <p className="mb-5 mt-2 text-red-700 text-sm font-bold">รหัสผ่านไม่ตรงกัน</p>
+                  <p className="mb-5 mt-2 text-red-700 text-sm font-bold">
+                    รหัสผ่านไม่ตรงกัน
+                  </p>
+                )}
+                {error && error.length > 0 && (
+                  <p className="mb-5 mt-2 text-red-700 text-sm font-bold">
+                    {error}
+                  </p>
                 )}
               </div>
 
               <button
-                type="submit"
-                disabled={isLoading}
+                onClick={() => {
+                  console.log("Submitting form...");
+                  handleSubmit();
+                }}
+                disabled={canSubmit ? false : true}
                 className={`w-full py-2 px-4 rounded-md text-white font-semibold cursor-pointer transition-all ${
-                  isLoading ? "bg-gray-400" : "bg-[#2E7CF6] hover:bg-[#0747A6]"
+                  !canSubmit ? "bg-gray-500" : "bg-[#2E7CF6] hover:bg-[#0747A6]"
                 }`}
               >
                 {isLoading ? "กำลังดำเนินการ..." : "สมัครสมาชิก"}
               </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
