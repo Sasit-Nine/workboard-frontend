@@ -8,6 +8,7 @@ import CreateBoardPage from './pages/CreateBoardPage'
 import MyBoardPage from './pages/MyBoardPage'
 import ScrumBoardPage from './pages/ScrumBoardPage'
 import TeamManage from './pages/TeamManage'
+import Navbar from './components/Navbar'
 
 function App() {
 
@@ -20,7 +21,12 @@ function App() {
             <Route path="/signup" element={<SignUpPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/create-board" element={<CreateBoardPage />} />
-              <Route path="/my-board" element={<MyBoardPage />} />
+              <Route path="/my-board" element={
+                <div>
+                  <Navbar />
+                  <MyBoardPage />
+                </div>
+               } />
               <Route path="/board/:id" element={<ScrumBoardPage />} />
               <Route path="/team-manage/:id" element={<TeamManage />} />
             </Route>

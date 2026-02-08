@@ -201,3 +201,18 @@ export interface ChangeTaskPositionResponse {
   position: number;
   created_at: string;
 }
+
+export interface GetAllBoardsResponse {
+  id: number
+  board: Board
+  email: string
+  role: string
+  joined_at: string
+}
+
+export interface Board {
+  id: number
+  name: string
+  created_at: string
+}
+

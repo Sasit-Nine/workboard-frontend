@@ -82,7 +82,25 @@ export default function LoginPage() {
         </div>
         <div className="w-full lg:w-1/2 p-8 sm:p-12 lg:p-16 flex flex-col justify-center bg-white">
           <div className="max-w-md mx-auto w-full">
-            <h2 className="text-center text-3xl font-bold text-gray-900">
+            <div className="flex flex-col items-center lg:hidden select-none">
+              <div className="leading-none text-center">
+                <h1 className="text-6xl font-extrabold tracking-tight">
+                  <span className="bg-linear-to-r from-blue-700 via-blue-600 to-blue-400 bg-clip-text text-transparent drop-shadow-sm">
+                    Work
+                  </span>
+                </h1>
+
+                <div className="mt-3 inline-flex items-center gap-2">
+                  <span className="text-6xl font-extrabold tracking-tight text-slate-900">
+                    Board
+                  </span>
+                  <span className="h-3 w-3 rounded-full bg-blue-600 shadow-sm shadow-blue-200/70" />
+                </div>
+
+                <div className="mt-3 mx-auto h-1.5 w-24 rounded-full bg-linear-to-r from-blue-400 via-blue-500 to-blue-400 opacity-100" />
+              </div>
+            </div>
+            <h2 className="text-center text-3xl mt-5 font-bold text-gray-900">
               เข้าสู่ระบบ
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600 mb-8">
@@ -95,7 +113,6 @@ export default function LoginPage() {
               </Link>
             </p>
             <div className="space-y-6">
-
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">

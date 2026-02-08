@@ -18,6 +18,7 @@ import type {
   EditTaskPositionRequest,
   GetTaskResponse,
   ChangeTaskPositionResponse,
+  GetAllBoardsResponse,
 } from "../type/type";
 
 import { authClient, coreClient } from "./client";
@@ -30,7 +31,10 @@ export const apiService = {
 
   login: (body: LoginRequest) =>
     authClient
-      .post<LoginResponseSuccess | LoginResponseFailure>("/api/auth-service/login", body)
+      .post<LoginResponseSuccess | LoginResponseFailure>(
+        "/api/auth-service/login",
+        body
+      )
       .then((r) => r.data),
 
   createBoard: (body: CreateBoardRequest) =>
@@ -75,5 +79,10 @@ export const apiService = {
   getTaskById: (taskId: number) =>
     coreClient
       .get<GetTaskResponse>(`/api/task/get-task/${taskId}`)
+      .then((r) => r.data),
+
+  getAllBoard: () =>
+    coreClient
+      .get<GetAllBoardsResponse[]>(`/api/boards/get-all-boards`)
       .then((r) => r.data),
 };
