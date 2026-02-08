@@ -49,78 +49,78 @@ export const apiService = {
 
   createBoard: (body: CreateBoardRequest) =>
     coreClient
-      .post<CreateBoardResponse>("/api/boards/create-board", body)
+      .post<CreateBoardResponse>("/api/core-service/boards/create-board", body)
       .then((r) => r.data),
 
   deleteBoard: (body: DeleteBoardRequest) =>
-    coreClient.post("/api/boards/delete-board", body).then((r) => r.data),
+    coreClient.post("/api/core-service/boards/delete-board", body).then((r) => r.data),
 
   editBoard: (body: EditBoardRequest) =>
-    coreClient.post("/api/boards/edit-board", body).then((r) => r.data),
+    coreClient.post("/api/core-service/boards/edit-board", body).then((r) => r.data),
 
   createColumn: (body: CreateCollumnRequest) =>
     coreClient
-      .post<ColumnCreateResponse>("/api/columns/create-column", body)
+      .post<ColumnCreateResponse>("/api/core-service/columns/create-column", body)
       .then((r) => r.data),
 
   deleteColumn: (body: DeleteCollumnRequest) =>
-    coreClient.post("/api/columns/delete-column", body).then((r) => r.data),
+    coreClient.post("/api/core-service/columns/delete-column", body).then((r) => r.data),
 
   editColumn: (body: EditCollumnRequest) =>
-    coreClient.post("/api/columns/edit-column", body).then((r) => r.data),
+    coreClient.post("/api/core-service/columns/edit-column", body).then((r) => r.data),
 
   editColumnPosition: (body: EditColumnPositionRequest) =>
     coreClient
-      .post("/api/columns/edit-column-position", body)
+      .post("/api/core-service/columns/edit-column-position", body)
       .then((r) => r.data),
 
   createTask: (body: CreateTaskRequest) =>
     coreClient
-      .post<CreateTaskResponse>("/api/task/create-task", body)
+      .post<CreateTaskResponse>("/api/core-service/task/create-task", body)
       .then((r) => r.data),
 
   deleteTask: (body: DeleteTaskRequest) =>
     coreClient
-      .post<DeleteTaskResponse>("/api/task/delete-task", body)
+      .post<DeleteTaskResponse>("/api/core-service/task/delete-task", body)
       .then((r) => r.data),
 
   editTask: (body: EditTaskRequest) =>
     coreClient
-      .post<EditTaskResponse>("/api/task/edit-task", body)
+      .post<EditTaskResponse>("/api/core-service/task/edit-task", body)
       .then((r) => r.data),
 
   changeTaskPosition: (body: EditTaskPositionRequest) =>
     coreClient
-      .post<ChangeTaskPositionResponse>("/api/task/edit-task-position", body)
+      .post<ChangeTaskPositionResponse>("/api/core-service/task/edit-task-position", body)
       .then((r) => r.data),
 
   getTaskById: (taskId: number) =>
     coreClient
-      .get<GetTaskResponse>(`/api/task/get-task/${taskId}`)
+      .get<GetTaskResponse>(`/api/core-service/task/get-task/${taskId}`)
       .then((r) => r.data),
 
   getAllBoard: () =>
     coreClient
-      .get<GetAllBoardsResponse[]>(`/api/boards/get-all-boards`)
+      .get<GetAllBoardsResponse[]>(`/api/core-service/boards/get-all-boards`)
       .then((r) => r.data),
 
   getBoardOne: (boardId: number) =>
     coreClient
-      .get<GetBoardOneResponse>(`/api/boards/get-board/${boardId}`)
+      .get<GetBoardOneResponse>(`/api/core-service/boards/get-board/${boardId}`)
       .then((r) => r.data),
 
   getMember: (boardId: number) =>
     coreClient
-      .get<GetMembersResponse>(`/api/boards/get-board-members/${boardId}`)
+      .get<GetMembersResponse>(`/api/core-service/boards/get-board-members/${boardId}`)
       .then((r) => r.data),
 
   addMember: (data: AddMemberRequest) => 
     coreClient
-      .post<AddMemberResponse>(`/api/boards/add-board-member`, data)
+      .post<AddMemberResponse>(`/api/core-service/boards/add-board-member`, data)
       .then((r) => r.data),
 
   removeMember: (data: RemoveMemberRequest) =>
     coreClient
-      .post<RemoveMemberResponse>(`/api/boards/remove-board-member`, data)
+      .post<RemoveMemberResponse>(`/api/core-service/boards/remove-board-member`, data)
       .then((r) => r.data),
 };
